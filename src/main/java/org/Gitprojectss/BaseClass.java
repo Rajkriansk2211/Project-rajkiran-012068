@@ -1,4 +1,4 @@
-package org.githubproject;
+package org.Gitprojectss;
 
 import java.awt.AWTException;
 import java.awt.Robot;
@@ -15,33 +15,80 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseClass {
 	
 	
 	
-//	Browserlaunch
+// Launch browser based on name
 	public  static WebDriver driver;
 	
-	public static void launchBrowser(String bname) {
-		switch (bname) {
-			case"chrome":
-			driver=new ChromeDriver();
-		  break;
-		case "edge":
-			driver=new EdgeDriver();
-			break;
-		case "firefox":
-			driver=new FirefoxDriver();
-			break;
-		default:
-			driver= new ChromeDriver();
-		}		
-	}
+    public static void launchBrowser3(String browserName) {
+
+        if (browserName == null) {
+            browserName = "chrome"; // default
+        }
+
+        switch (browserName.toLowerCase()) {
+
+        case "chrome":
+
+            WebDriverManager.chromedriver().setup();
+
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--remote-allow-origins=*");
+
+            driver = new ChromeDriver(chromeOptions);
+            break;
+
+        case "firefox":
+
+            WebDriverManager.firefoxdriver().setup();
+
+            FirefoxOptions firefoxOptions = new FirefoxOptions();
+
+            driver = new FirefoxDriver(firefoxOptions);
+            break;
+
+        case "edge":
+
+            WebDriverManager.edgedriver().setup();
+
+            driver = new EdgeDriver();
+            break;
+
+        default:
+
+            System.out.println("Invalid browser name: " + browserName);
+            System.out.println("Launching default browser: Chrome");
+
+            WebDriverManager.chromedriver().setup();
+
+            ChromeOptions defaultOptions = new ChromeOptions();
+            defaultOptions.addArguments("--remote-allow-origins=*");
+
+            driver = new ChromeDriver(defaultOptions);
+            break;
+        }
+
+        driver.manage().window().maximize();
+    }
+
+    public static void closeBrowser() {
+
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
 	
 //	UrlLaunch	
 	public static void urllaunch(String url) {
